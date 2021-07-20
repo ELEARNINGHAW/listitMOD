@@ -2,13 +2,13 @@
 
 listit- Moodle - MOD
 
-Plugin zum connect zum Klausurverwaltungstool
+Plugin zum connect zum List It! Tool
 
 moodle/mod/listit
 
 werner.welte@haw-hamburg.de
 
-01.09.2020
+20.07.2021
 
 ---------------------------------------------------------------------------------------------------
 
