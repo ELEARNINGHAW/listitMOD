@@ -29,9 +29,9 @@ $n  = optional_param('n', 0, PARAM_INT);  // ... listit instance ID - it should 
 if ($id) {
     $cm         = get_coursemodule_from_id('listit', $id, 0, false, MUST_EXIST);
     $course     = $DB -> get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-    $listit  = $DB -> get_record('listit', array('id' => $cm->instance), '*', MUST_EXIST);
+    $listit     = $DB -> get_record('listit', array('id' => $cm->instance), '*', MUST_EXIST);
 } else if ($n) {
-    $listit  = $DB -> get_record('listit', array('id' => $n), '*', MUST_EXIST);
+    $listit     = $DB -> get_record('listit', array('id' => $n), '*', MUST_EXIST);
     $course     = $DB -> get_record('course', array('id' => $listit->course), '*', MUST_EXIST);
     $cm         = get_coursemodule_from_instance('listit', $listit->id, $course->id, false, MUST_EXIST);
 } else {
@@ -42,7 +42,7 @@ require_login($course, true, $cm);
 
 $event = \mod_listit\event\course_module_viewed::create(array(
     'objectid' => $PAGE -> cm -> instance,
-    'context' => $PAGE -> context,
+    'context'  => $PAGE -> context,
 ));
 $event->add_record_snapshot('course', $PAGE -> course);
 $event->add_record_snapshot($PAGE -> cm -> modname, $listit);
@@ -66,44 +66,43 @@ echo $OUTPUT->header();
 
 $coursecontext = context_course::instance($COURSE->id);
 
-$USER->role = 2;  /* Studi / Gast */
+$USER -> role = 2;  /* Studi / Gast */
 
 if ( has_capability( 'moodle/course:update', $coursecontext, $USER->id) ) 
 { 
-  $USER->role = 3; /* Dozent / Tutor */
+  $USER -> role = 3; /* Dozent / Tutor */
 }
 
-$salt = '1aFpeznX4Ek3FaCBsbTCR74D1EjcUlfAU9qiddE7';
+$salt = '"dfgb%TBGI$"ert3QZU/ZU!335 "3 35ertwetwert%wertQer$tZHetr%&et$UetwertU"ertEe%tTert/e&rtEwe h$OrzPtr/zKertz(rtJzWertt%EUI §$O "$ $TZqerz wgr f"';
 
 $current_user = array();
-$current_user[ 'userVorname'	 ] =  ( $USER -> firstname   );
-$current_user[ 'userNachname'  ] =  ( $USER -> lastname    );
-$current_user[ 'userKennung'   ] =  ( $USER -> username    );
-$current_user[ 'userID'        ] =  ( $USER -> id 		 );
-$current_user[ 'userEmail'     ] =  ( $USER -> email       );
-$current_user[ 'courseID'      ] =  ( $COURSE -> id        );
-$current_user[ 'courseName'    ] =  ( $COURSE -> fullname  );
-$current_user[ 'token'         ] =   hash('sha512',
-  $current_user[ 'userVorname'  ] .
-  $current_user[ 'userNachname' ] .
-  $current_user[ 'userKennung'  ] .
-  $current_user[ 'userID'       ] .
-  $current_user[ 'userEmail'    ] .
-  $current_user[ 'courseID'     ] .
-  $current_user[ 'courseName'   ] .
-  $salt );
+$current_user[ 'userVorname'   ] = ( $USER -> firstname   );
+$current_user[ 'userNachname'  ] = ( $USER -> lastname    );
+$current_user[ 'userKennung'   ] = ( $USER -> username    );
+$current_user[ 'userID'        ] = ( $USER -> id 	      );
+$current_user[ 'userEmail'     ] = ( $USER -> email       );
+$current_user[ 'userRole'      ] = ( $USER -> role        );
+$current_user[ 'courseID'      ] = ( $COURSE -> id        );
+
+$current_user[ 'courseName'    ] = ( $COURSE -> fullname  );
+$current_user[ 'token'         ] =  hash('sha512',
+$current_user[ 'userVorname'   ] .
+$current_user[ 'userNachname'  ] .
+$current_user[ 'userKennung'   ] .
+$current_user[ 'userID'        ] .
+$current_user[ 'userEmail'     ] .
+$current_user[ 'courseID'      ] .
+$current_user[ 'courseName'    ] .
+$salt );
 
 if ( isset( $_SERVER[ 'SERVER_NAME' ] ) AND ( $_SERVER[ 'SERVER_NAME' ] )   == 'localhost' )
      { $URL = "http://localhost/haw/";                                      } # Dev-Server
 else { $URL = "https://lernserver.el.haw-hamburg.de/haw/";                  } # Live-Server
 
-#$URL = "https://lernserver.el.haw-hamburg.de/haw/";
+$srvpath = $URL."listitApp/index.php"  ; 
 
-
-if ($USER -> role == 3)  $srvpath = $URL."listitApp/index2.php" ;                       # Dozenten-View
-else                     $srvpath = $URL."listitApp/index.php" ;   # Studi-View
-
-$srvpath .= "?ufn=" .rawurlencode( base64_encode( $current_user[ 'userVorname'	  ]  ) )
+$srvpath .=
+   "?ufn=" .rawurlencode( base64_encode( $current_user[ 'userVorname'   ]  ) )
   ."&uln=" .rawurlencode( base64_encode( $current_user[ 'userNachname'  ]  ) )
   ."&uid=" .rawurlencode( base64_encode( $current_user[ 'userKennung'   ]  ) )
   ."&uun=" .rawurlencode( base64_encode( $current_user[ 'userID'        ]  ) )
@@ -111,19 +110,12 @@ $srvpath .= "?ufn=" .rawurlencode( base64_encode( $current_user[ 'userVorname'	 
   ."&cid=" .rawurlencode( base64_encode( $current_user[ 'courseID'      ]  ) )
   ."&cfn=" .rawurlencode( base64_encode( $current_user[ 'courseName'    ]  ) )
   ."&tok=" .rawurlencode( base64_encode( $current_user[ 'token'         ]  ) )
-  ."&rnd=" .rand(100000, 999999)
-  ."&rol=".$USER->role;
+  ."&rol=" .rawurlencode( base64_encode( $current_user[ 'userRole'      ]  ) )
+  ."&rnd=" .rand(100000, 999999);
 
-
-
-/*
-if ( $USER -> role ==  2 ) { $view = '_blank' ; }
-else                       { $view = '_self'  ; }
-*/
 
 $content = "<iframe allowfullscreen allowfullscreen = \"true\"  border=\"0\" frameborder=\"0\" src=\"" .$srvpath. "\" style=\"width:100% ; height:1000px ;  display: block;\" ></iframe>";
 
-#$content = $_SERVER[ 'SERVER_NAME' ];
 echo $OUTPUT->box($content, "generalbox center clearfix");
 
 echo $OUTPUT->footer();

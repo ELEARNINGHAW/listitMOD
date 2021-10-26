@@ -2,7 +2,7 @@
 
 listit- Moodle - MOD
 
-Plugin zum connect zum List It! Tool
+Plugin - connect zum Service des List It! Tool
 
 moodle/mod/listit
 

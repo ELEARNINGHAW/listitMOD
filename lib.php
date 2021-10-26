@@ -335,17 +335,6 @@ function listit_grade_item_update(stdClass $listit, $reset=false) {
     $item['itemname'] = clean_param($listit->name, PARAM_NOTAGS);
     $item['gradetype'] = GRADE_TYPE_VALUE;
 
-    if ($listit->grade > 0) {
-        $item['gradetype'] = GRADE_TYPE_VALUE;
-        $item['grademax']  = $listit->grade;
-        $item['grademin']  = 0;
-    } else if ($listit->grade < 0) {
-        $item['gradetype'] = GRADE_TYPE_SCALE;
-        $item['scaleid']   = -$listit->grade;
-    } else {
-        $item['gradetype'] = GRADE_TYPE_NONE;
-    }
-
     if ($reset) {
         $item['reset'] = true;
     }

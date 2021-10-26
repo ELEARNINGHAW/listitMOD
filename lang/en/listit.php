@@ -22,7 +22,7 @@
  * if you like, and it can span multiple lines.
  *
  * @package    mod_listit
- * @copyright  2015 - 2017 werner.welte@haw-hamburg.de
+ * @copyright  2015 - 2021 werner.welte@haw-hamburg.de
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
